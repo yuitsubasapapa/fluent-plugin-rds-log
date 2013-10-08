@@ -26,6 +26,8 @@ every 10 seconds from AWS RDS.
   host [RDS Hostname]
   username [RDS Username]
   password [RDS Password]
+  log_type {slow_log|general_log}
+  refresh_interval 30
 </source>
 ```
 
@@ -38,6 +40,8 @@ every 10 seconds from AWS RDS.
   host [RDS Hostname]
   username [RDS Username]
   password [RDS Password]
+  log_type slow_log
+  refresh_interval 10
 </source>
 
 <match rds-slowlog>
@@ -61,6 +65,6 @@ every 10 seconds from AWS RDS.
 - td-agent.log
 
 ```
-2013-06-29 00:32:55 +0900 [error]: fluent-plugin-rds-slowlog: cannot connect RDS
+2013-06-29 00:32:55 +0900 [error]: fluent-plugin-rds-log: cannot connect RDS
 ```
 
