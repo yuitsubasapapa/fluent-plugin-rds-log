@@ -6,6 +6,8 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
   config_param :port,     :integer, :default => 3306
   config_param :username, :string,  :default => nil
   config_param :password, :string,  :default => nil
+  config_param :type,     :string,  :default => nil
+  config_param :refresh_interval, :integer, :default => 30
 
    def initialize
     super
@@ -14,6 +16,9 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
 
   def configure(conf)
     super
+    if @type.empty?
+      $log.error "fluent-plugin-rds-log: missing parameter type is {slow_log|general_log}"
+    end
     begin
       @client = Mysql2::Client.new({
         :host => @host,
@@ -23,7 +28,7 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
         :database => 'mysql'
       })
     rescue
-      $log.error "fluent-plugin-rds-slowlog: cannot connect RDS"
+      $log.error "fluent-plugin-rds-log: cannot connect RDS"
     end
   end
 
@@ -41,19 +46,22 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
   private
   def watch
     while true
-      sleep 10
+      sleep @interval
       output
     end
   end
 
   def output
+    stored_procedure_name = 'mysql.rds_rotate_' << @type
+    @client.query('CALL ' << stored_procedure_name)
+    backup_table_name = 'mysql.' << @type << '_backup'
+    @client.query('CREATE TEMPORARY TABLE mysql.output_log LIKE ' << backup_tble_name)
+
     slow_log_data = []
-    slow_log_data = @client.query('SELECT * FROM slow_log', :cast => false)
+    slow_log_data = @client.query('SELECT * FROM mysql.output_log', :cast => false)
 
     slow_log_data.each do |row|
       Fluent::Engine.emit(tag, Fluent::Engine.now, row)
     end
-
-    @client.query('CALL mysql.rds_rotate_slow_log')
   end
 end
