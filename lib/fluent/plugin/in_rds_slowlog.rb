@@ -6,7 +6,7 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
   config_param :port,     :integer, :default => 3306
   config_param :username, :string,  :default => nil
   config_param :password, :string,  :default => nil
-  config_param :type,     :string,  :default => nil
+  config_param :log_type, :string,  :default => nil
   config_param :refresh_interval, :integer, :default => 30
 
    def initialize
@@ -16,8 +16,8 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
 
   def configure(conf)
     super
-    if @type.empty?
-      $log.error "fluent-plugin-rds-log: missing parameter type is {slow_log|general_log}"
+    if @log_type.empty?
+      $log.error "fluent-plugin-rds-log: missing parameter log_type is {slow_log|general_log}"
     end
     begin
       @client = Mysql2::Client.new({
@@ -52,9 +52,9 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
   end
 
   def output
-    stored_procedure_name = 'mysql.rds_rotate_' << @type
+    stored_procedure_name = 'mysql.rds_rotate_' << @log_type
     @client.query('CALL ' << stored_procedure_name)
-    backup_table_name = 'mysql.' << @type << '_backup'
+    backup_table_name = 'mysql.' << @log_type << '_backup'
     @client.query('CREATE TEMPORARY TABLE mysql.output_log LIKE ' << backup_tble_name)
 
     slow_log_data = []
