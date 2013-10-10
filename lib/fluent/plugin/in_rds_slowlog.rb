@@ -1,5 +1,5 @@
-class Fluent::Rds_SlowlogInput < Fluent::Input
-  Fluent::Plugin.register_input("rds_slowlog", self)
+class Fluent::Rds_LogInput < Fluent::Input
+  Fluent::Plugin.register_input("rds_log", self)
 
   config_param :tag,      :string
   config_param :host,     :string,  :default => nil
