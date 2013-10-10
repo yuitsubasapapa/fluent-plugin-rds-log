@@ -52,10 +52,8 @@ class Fluent::Rds_SlowlogInput < Fluent::Input
   end
 
   def output
-    stored_procedure_name = 'mysql.rds_rotate_' << @log_type
-    @client.query('CALL ' << stored_procedure_name)
-    backup_table_name = 'mysql.' << @log_type << '_backup'
-    @client.query('CREATE TEMPORARY TABLE mysql.output_log LIKE ' << backup_tble_name)
+    @client.query("CALL mysql.rds_rotate_#{@log_type}")
+    @client.query("CREATE TEMPORARY TABLE mysql.output_log LIKE mysql.#{@log_type}_backup")
 
     slow_log_data = []
     slow_log_data = @client.query('SELECT * FROM mysql.output_log', :cast => false)
