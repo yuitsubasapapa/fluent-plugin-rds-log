@@ -46,7 +46,8 @@ class Fluent::Rds_LogInput < Fluent::Input
   private
   def watch
     while true
-      sleep @interval
+      $log.error "fluent-plugin-rds-log: execute watch"
+      sleep @refresh_interval
       output
     end
   end
