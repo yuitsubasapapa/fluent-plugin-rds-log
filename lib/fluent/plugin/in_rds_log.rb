@@ -54,6 +54,7 @@ class Fluent::Rds_LogInput < Fluent::Input
 
   def output
     @client.query("CALL mysql.rds_rotate_#{@log_type}")
+    @client.query("DROP TEMPORARY TABLE IF EXISTS mysql.output_log")
     @client.query("CREATE TEMPORARY TABLE mysql.output_log LIKE mysql.#{@log_type}_backup")
 
     output_log_data = []
