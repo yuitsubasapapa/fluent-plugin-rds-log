@@ -53,12 +53,8 @@ class Fluent::Rds_LogInput < Fluent::Input
 
   def output
     @client.query("CALL mysql.rds_rotate_#{@log_type}")
-    @client.query("DROP TEMPORARY TABLE IF EXISTS mysql.output_log")
-    @client.query("CREATE TEMPORARY TABLE mysql.output_log LIKE mysql.#{@log_type}_backup")
 
-    output_log_data = []
-    output_log_data = @client.query('SELECT * FROM mysql.output_log', :cast => false)
-
+    output_log_data = @client.query("SELECT * FROM mysql.#{@log_type}_backup", :cast => false)
     output_log_data.each do |row|
       Fluent::Engine.emit(tag, Fluent::Engine.now, row)
     end
