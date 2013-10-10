@@ -3,12 +3,12 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
-  gem.name          = "fluent-plugin-rds-slowlog"
+  gem.name          = "fluent-plugin-rds-log"
   gem.version       = "0.0.4"
-  gem.authors       = ["kenjiskywalker"]
-  gem.email         = ["git@kenjiskywalker.org"]
-  gem.description   = "Amazon RDS slow_log input plugin for Fluent event collector"
-  gem.homepage      = "https://github.com/kenjiskywalker/fluent-plugin-rds-slowlog"
+  gem.authors       = ["shinsaka"]
+  gem.email         = ["shinx1265@gmail.com"]
+  gem.description   = "Amazon RDS slow_log and general_log input plugin for Fluent event collector"
+  gem.homepage      = "https://github.com/shinsaka/fluent-plugin-rds-log"
   gem.summary       = gem.description
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
