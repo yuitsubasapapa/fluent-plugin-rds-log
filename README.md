@@ -1,69 +1,52 @@
-# fluent-plugin-rds-log (DEBUGGING NOW!!)
+# Amazon RDS (for MySQL) input plugin
+
+## Overview
+***Amazon Web Services RDS(MySQL) general_log and slow_log input plugin.  
+
+##Installation
+
+    $ gem install fluent-plugin-rds-log
 
 ## RDS Setting
 
 [Working with MySQL Database Log Files / aws documentation](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.Concepts.MySQL.html)
 
+- Set the `log_output` parameter to `TABLE` to write the logs to a database table.
 - Set the `slow_query_log` parameter to `1`
+- Set the `general_log` parameter to `1`
 - setting `min_examined_row_limit`
 - setting `long_query_time`
-
-## Overview
-***AWS RDS slow_log*** input plugin.  
-
-1. **"SELECT * FROM slow_log"**
-2. **"CALL mysql.rds_rotate_slow_log"**
-
-every 10 seconds from AWS RDS.
 
 ## Configuration
 
 ```config
 <source>
-  type rds_slowlog
-  tag rds-slowlog
+  type rds_log
+  log_type <slow_log | general_log>
   host [RDS Hostname]
   username [RDS Username]
   password [RDS Password]
-  log_type {slow_log|general_log}
-  refresh_interval 30
+  refresh_interval [number]
+  tag [tag-name]
 </source>
 ```
 
-### Example GET RDS slow_log
+### Example GET RDS general_log
 
 ```config
 <source>
-  type rds_slowlog
-  tag rds-slowlog
-  host [RDS Hostname]
-  username [RDS Username]
-  password [RDS Password]
-  log_type slow_log
-  refresh_interval 10
+  type rds_log
+  log_type general_log
+  host endpoint.abcdefghijkl.ap-northeast-1.rds.amazonaws.com
+  username rds_user
+  password rds_password
+  refresh_interval 30
+  tag rds-general-log
 </source>
 
-<match rds-slowlog>
-  type copy
- <store>
+<match rds-general-log>
   type file
-  path /var/log/slow_log
- </store>
+  path /var/log/rds-general-log
 </match>
-```
-
-#### output data format
-
-```
-2013-03-08T16:04:43+09:00       rds-slowlog     {"start_time":"2013-03-08 07:04:38","user_host":"rds_db[rds_db] @  [192.0.2.10]","query_time":"00:00:00","lock_time":"00:00:00","rows_sent":"3000","rows_examined":"3000","db":"rds_db","last_insert_id":"0","insert_id":"0","server_id":"100000000","sql_text":"select foo from bar"}
-2013-03-08T16:04:43+09:00       rds-slowlog     {"start_time":"2013-03-08 07:04:38","user_host":"rds_db[rds_db] @  [192.0.2.10]","query_time":"00:00:00","lock_time":"00:00:00","rows_sent":"3000","rows_examined":"3000","db":"rds_db","last_insert_id":"0","insert_id":"0","server_id":"100000000","sql_text":"Quit"}
-```
-
-#### if not connect
-
-- td-agent.log
-
-```
-2013-06-29 00:32:55 +0900 [error]: fluent-plugin-rds-log: cannot connect RDS
 ```
 
