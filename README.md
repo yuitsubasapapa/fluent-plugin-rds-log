@@ -27,6 +27,7 @@
   username [RDS Username]
   password [RDS Password]
   refresh_interval [number]
+  auto_reconnect [true|false]
   tag [tag-name]
 </source>
 ```
@@ -41,6 +42,7 @@
   username rds_user
   password rds_password
   refresh_interval 30
+  auto_reconnect true
   tag rds-general-log
 </source>
 
