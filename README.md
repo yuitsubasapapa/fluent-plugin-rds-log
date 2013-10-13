@@ -5,7 +5,7 @@
 
 ##Installation
 
-    $ gem install fluent-plugin-rds-log
+    $ fluent-gem install fluent-plugin-rds-log
 
 ## RDS Setting
 
