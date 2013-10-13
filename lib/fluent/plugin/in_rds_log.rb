@@ -26,7 +26,7 @@ class Fluent::Rds_LogInput < Fluent::Input
         :port => @port,
         :username => @username,
         :password => @password,
-        :reconnect => @auto_reconnect
+        :reconnect => @auto_reconnect,
         :database => 'mysql'
       })
     rescue
