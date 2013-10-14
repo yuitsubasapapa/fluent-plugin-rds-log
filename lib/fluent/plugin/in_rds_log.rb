@@ -20,18 +20,6 @@ class Fluent::Rds_LogInput < Fluent::Input
     if @log_type.empty?
       $log.error "fluent-plugin-rds-log: missing parameter log_type is {slow_log|general_log}"
     end
-    begin
-      @client = Mysql2::Client.new({
-        :host => @host,
-        :port => @port,
-        :username => @username,
-        :password => @password,
-        :reconnect => @auto_reconnect,
-        :database => 'mysql'
-      })
-    rescue
-      $log.error "fluent-plugin-rds-log: cannot connect RDS"
-    end
   end
 
   def start
@@ -46,7 +34,24 @@ class Fluent::Rds_LogInput < Fluent::Input
   end
 
   private
+  def connect
+    begin
+      $log.info "fluent-plugin-rds-log: connecting RDS"
+      @client = Mysql2::Client.new({
+        :host => @host,
+        :port => @port,
+        :username => @username,
+        :password => @password,
+        :reconnect => @auto_reconnect,
+        :database => 'mysql'
+      })
+      $log.info "fluent-plugin-rds-log: connected RDS"
+    rescue
+      $log.error "fluent-plugin-rds-log: cannot connect RDS"
+    end
+  end
   def watch
+    connect
     while true
       sleep @refresh_interval
       output
@@ -54,6 +59,13 @@ class Fluent::Rds_LogInput < Fluent::Input
   end
 
   def output
+    if @client.nil?
+      connect
+      if @client.nil?
+        return
+      end
+    end
+
     @client.query("CALL mysql.rds_rotate_#{@log_type}")
 
     output_log_data = @client.query("SELECT * FROM mysql.#{@log_type}_backup", :cast => false)
