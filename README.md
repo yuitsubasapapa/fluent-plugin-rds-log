@@ -27,12 +27,12 @@
 <source>
   type rds_log
   log_type <slow_log | general_log>
-  host [RDS Hostname]
-  username [RDS Username]
-  password [RDS Password]
-  refresh_interval [number]
-  auto_reconnect [true|false]
-  tag [tag-name]
+  host <RDS Hostname>
+  username <RDS Username>
+  password <RDS Password>
+  refresh_interval <number>
+  auto_reconnect <true|false>
+  tag <tag-name>
 </source>
 ```
 
