@@ -1,11 +1,15 @@
 # Amazon RDS (for MySQL) input plugin
 
 ## Overview
-***Amazon Web Services RDS(MySQL) general_log and slow_log input plugin.  
+- Amazon Web Services RDS(MySQL) general_log and slow_log input plugin.  
 
 ##Installation
 
     $ fluent-gem install fluent-plugin-rds-log
+*Maybe, you also need the following packages*
+- MySQL-shared
+- MySQL-shared-compat
+- MySQL-devel
 
 ## RDS Setting
 
