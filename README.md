@@ -1,4 +1,4 @@
-# Amazon RDS (for MySQL) input plugin
+# Amazon RDS (for MySQL) input plugin for [Fluentd](http://fluentd.org)
 
 ## Overview
 - Amazon Web Services RDS(MySQL) general_log and slow_log input plugin.  
