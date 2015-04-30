@@ -1,19 +1,19 @@
-# Amazon RDS (for MySQL) input plugin for [Fluentd](http://fluentd.org)
+# Amazon RDS (for Postgresql) input plugin for [Fluentd](http://fluentd.org)
 
 ## Overview
-- Amazon Web Services RDS(MySQL) general_log and slow_log input plugin.  
+- Amazon Web Services RDS(Postgresql) general_log and slow_log input plugin.  
 
 ##Installation
 
     $ fluent-gem install fluent-plugin-rds-log
 *Maybe, you also need the following packages*
-- MySQL-shared
-- MySQL-shared-compat
-- MySQL-devel
+- Postgresql-shared
+- Postgresql-shared-compat
+- Postgresql-devel
 
 ## RDS Setting
 
-[Working with MySQL Database Log Files / aws documentation](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.Concepts.MySQL.html)
+[Working with Postgresql Database Log Files / aws documentation](http://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/USER_LogAccess.Concepts.PostgreSQL.html)
 
 - Set the `log_output` parameter to `TABLE` to write the logs to a database table.
 - Set the `slow_query_log` parameter to `1`
